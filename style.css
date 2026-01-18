@@ -1,0 +1,31 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+#map-container {
+  width: 70vw;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#map {
+  width: 100%;
+}
+
+.slidecontainer {
+  width: 50vw;
+  max-width: 400px;
+  min-width: 200px;
+  margin: 16px auto;
+}
+
+.slider {
+  width: 100%;
+  display: block;
+}
