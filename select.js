@@ -58,6 +58,7 @@
     }
     
     var select=function(state){
+
       var index=selected.indexOf(state);        
       if (index < 0){ //make sure a state is selectedable
         check_mapdata(state);
@@ -66,6 +67,8 @@
         selected.push(state);
         done(state);
       }      
+
+      document.getElementById('graph').src = `http://localhost:3000/chart.png?states=${simplemaps_select.selected.join(',')}`;
     }
     
     var select_all=function(){

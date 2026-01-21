@@ -9,19 +9,18 @@ if not api_key:
     raise ValueError("Please set the FLUVIEW_API_KEY environment variable")
 
 
-# All states + DC
+# All states + DC + Territories
 states = [
     "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN",
     "IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV",
     "NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN",
-    "TX","UT","VT","VA","WA","WV","WI","WY","DC"
+    "TX","UT","VT","VA","WA","WV","WI","WY","DC","X", "AS", "MP", "GU", "PR",
+    "VI"
 ]
 
-# Connect to SQLite
 conn = sqlite3.connect("ili_data.db")
 cur = conn.cursor()
 
-# Create table if it doesn't exist
 cur.execute('''
 CREATE TABLE IF NOT EXISTS ili_data (
     release_date TEXT,
@@ -44,14 +43,12 @@ CREATE TABLE IF NOT EXISTS ili_data (
 )
 ''')
 
-# Years to fetch (adjust as needed)
 start_year = 1997
-end_year = 2025  # inclusive
+end_year = 2025
 
 for year in range(start_year, end_year + 1):
-    # Build epiweek range for the year
     start_epi = int(f"{year}01")
-    end_epi = int(f"{year}53")  # some years have 53 weeks
+    end_epi = int(f"{year}53")
 
     print(f"Fetching data for {year} ({start_epi}-{end_epi})...")
 
@@ -105,10 +102,8 @@ for year in range(start_year, end_year + 1):
 
     print(f"Year {year} done, {len(data)} rows inserted.")
 
-    # Be polite with the API
     time.sleep(1)
 
-# Commit and close
 conn.commit()
 conn.close()
 

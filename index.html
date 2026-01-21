@@ -1,27 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>Sick Map</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="mapdata.js"></script>
-    <script src="usmap.js"></script>
-    <script src="select.js"></script>
-    <script src="update.js"></script>
-  </head>
-	<body>
-		<div id="map-container">
-			<h1>Sick Map</h1>
-			<div id="map"></div>
-		</div>
-    <div class="slidecontainer">
-  <input type="range" id="weekSlider" class="slider">
-    <div id="weekLabel" style="margin-top:8px;font-weight:bold;"></div>
-  </div> 
-  <button type="button" onclick="play()">Play</button> 
-	</body>
-</html>
-      
-    
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sick Map</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="mapdata.js" defer></script>
+  <script src="usmap.js" defer></script>
+  <script src="select.js" defer></script>
+  <script src="update.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Sick Map</h1>
+    <p class="subtitle">Interactive Influenza-Like Illness (ILI) Map</p>
+  </header>
+
+  <main>
+    <section id="map-container">
+      <div id="map"></div>
+    </section>
+
+    <section class="controls">
+      <div class="slidecontainer">
+        <label for="weekSlider">Week:</label>
+        <input type="range" id="weekSlider" class="slider">
+        <div id="weekLabel">Week 1</div>
+      </div>
+
+      <div class="playControls">
+        <button type="button" id="playButton" onclick="play()">▶ Play</button>
+        <button type="button" id="stopButton" onclick="stopPlaying()">⏹ Stop</button>
+        <label for="speedSlider">Speed:</label>
+        <input type="range" id="speedSlider" class="slider" min="0" max="200">
+      </div>
+
+
+      <div class="button-row">
+        <button type="button" onclick="nextWeek(false)">← Last Week</button>
+        <button type="button" onclick="nextWeek(true)">Next Week →</button>
+        <button type="button" onclick="nextYear(false)">← Last Year</button>
+        <button type="button" onclick="nextYear(true)">Next Year →</button>
+      </div>
+    </section>
+
+    <section class="graph-container">
+      <h2>ILI Chart</h2>
+      <img src="http://localhost:3000/chart.png?states=TX" id="graph" alt="ILI Chart" />
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Data sourced from Delphi's FluView<br>
+      Created by Matthew Johnson<br>
+      https://github.com/mattj2025/Sick-Map 
+    </p>
+  </footer>
+</body>
+
+</html>

@@ -1,24 +1,22 @@
 let availableWeeks = [];
 
+var stopPlay = false;
+
 document.addEventListener('DOMContentLoaded', async () => {
   const slider = document.getElementById('weekSlider');
-  const label  = document.getElementById('weekLabel');
+  const label = document.getElementById('weekLabel');
 
-  // 1. Load valid epiweeks from backend
   const res = await fetch('http://localhost:3000/available-weeks');
   availableWeeks = await res.json();
 
-  // 2. Configure slider to index into valid weeks
   slider.min = 0;
   slider.max = availableWeeks.length - 1;
   slider.step = 1;
-  slider.value = availableWeeks.length - 1; // latest week
+  slider.value = availableWeeks.length - 1;
 
-  // 3. Initial render
   updateLabel(slider.value);
   reload();
 
-  // 4. Respond to slider movement
   slider.addEventListener('input', () => {
     updateLabel(slider.value);
     reload();
@@ -46,7 +44,7 @@ async function reload() {
     const ili = stateData[state];
     const color = ili !== undefined
       ? iliToColor(ili)
-      : '#cccccc'; 
+      : '#cccccc';
 
     simplemaps_usmap.mapdata.state_specific[state].color = color;
     simplemaps_usmap.refresh_state(state);
@@ -59,22 +57,67 @@ function delay(ms) {
 }
 
 async function play() {
+  stopPlay = false;
   const slider = document.getElementById('weekSlider');
+  const speed = document.getElementById('speedSlider');
 
   for (let i = Number(slider.value); i < availableWeeks.length; i++) {
     slider.value = i;
 
     await reload();
+    await delay(200 - speed.value)
 
-    const epiweek = availableWeeks[i];
-    const year = Math.floor(epiweek / 100);
-    const week = epiweek % 100;
+    setWeekLabel(availableWeeks[i]);
 
-    document.getElementById('weekLabel').textContent =
-      `${year} – Week ${week}`;
+    if (stopPlay) {
+      break;
+    }
   }
 }
 
+function stopPlaying() {
+  stopPlay = true;
+}
+
+function nextWeek(future) {
+  const slider = document.getElementById('weekSlider');
+  if (future)
+    slider.value++;
+  else
+    slider.value--;
+
+  setWeekLabel(availableWeeks[slider.value]);
+  reload();
+}
+
+function nextYear(future) {
+  const slider = document.getElementById('weekSlider');
+  var week = availableWeeks[slider.value];
+  if (future)
+    week += 100;
+  else
+    week -= 100;
+
+  var index = availableWeeks.indexOf(week);
+  while (index == -1) {
+    week--;
+    index = availableWeeks.indexOf(week);
+    // in case of week 53
+  } 
+  slider.value = index;
+  setWeekLabel(availableWeeks[slider.value]);
+  reload();
+
+}
+
+
+function setWeekLabel(epiweek) {
+  const year = Math.floor(epiweek / 100);
+  const week = epiweek % 100;
+
+  document.getElementById('weekLabel').textContent =
+    `${year} – Week ${week}`;
+}
 
 
 
@@ -84,9 +127,9 @@ function iliToColor(ili, min = 0, max = 10) {
 
   let t = (ili - min) / (max - min);
 
-  let r = Math.round(255 * t);   
-  let g = Math.round(255 * (1 - t)); 
-  let b = 0;                    
+  let r = Math.round(255 * t);
+  let g = Math.round(255 * (1 - t));
+  let b = 0;
 
   let hr = r.toString(16).padStart(2, "0");
   let hg = g.toString(16).padStart(2, "0");

@@ -451,7 +451,7 @@ var simplemaps_usmap_mapdata={
       color: "default",
       hover_color: "default",
       url: "default",
-      hide: "yes"
+      hide: "no"
     },
     AS: {
       name: "American Samoa",
@@ -470,20 +470,7 @@ var simplemaps_usmap_mapdata={
       hide: "yes"
     }
   },
-  locations: {
-    "0": {
-      name: "New York",
-      lat: "40.71",
-      lng: "-74.0059731",
-      image_url: "default",
-      opacity: "default"
-    },
-    "1": {
-      name: "Anchorage",
-      lat: "61.2180556",
-      lng: "-149.9002778"
-    }
-  },
+  locations: { },
   labels: {
     HI: {
       color: "default",
